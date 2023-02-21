@@ -1,29 +1,29 @@
 import Head from 'next/head'
-import Image from 'next/image'
 import PillText from "@/components/PillText"
 import { useQuery } from 'react-query';
 import { NextPage } from "next";
-import SearchIcon from "@/assets/SearchIcon";
-import API from "@/utilities/FetchApi";
-import { TAGS } from "@/constants";
-import { IFinalData, ISymbol, ITicker } from "@/interfaces";
-import { useEffect, useMemo, useState } from "react";
+import { TABLE_CRYPTO_HEADER, TAGS, USD_TO_IDR_DEFAULT } from "@/constants";
+import { IFinalData, ISymbol, ITag, ITicker } from "@/interfaces";
+import { useContext, useEffect, useMemo, useState } from "react";
 import SearchBox from "@/components/SearchBox";
+import DataTable, { ITableHeader } from "@/components/DataTable";
+import TableTokenRow from "@/components/TableTokenRow";
 
 const getSymbolList = async () => await (await fetch("https://www.binance.com/bapi/composite/v1/public/marketing/symbol/list")).json();
 const getTickerList = async () => await (await fetch("https://api.binance.com/api/v3/ticker/24hr")).json();
 
 const Home: NextPage = () => {
   const [searchKey, setSearchKey] = useState("");
-  const [reFetch, setReFetch] = useState(false);
+  const [selectedPill, setSelectedPill] = useState("");
 
   const symbolList = useQuery("symbolList", getSymbolList);
   const tickerList = useQuery("tickerList", getTickerList, {
     refetchInterval: 3000
   });
 
-  useEffect(() => { 
-  }, [searchKey]);
+  useEffect(() => {
+    setSearchKey("");
+  }, [selectedPill])
 
   const getCombinedData = () => {
     const symbols = symbolList.data?.data.map((item: ISymbol, index: number) => {
@@ -35,7 +35,7 @@ const Home: NextPage = () => {
         price: item.price,
         volume: item.volume,
         rank: item.rank,
-        tags: item.tags
+        tags: item.tags,
       }
     }) as ISymbol[];
 
@@ -45,7 +45,9 @@ const Home: NextPage = () => {
         priceChange: item.priceChange,
         priceChangePercent: item.priceChangePercent,
         lastPrice: item.lastPrice,
-        volume: item.volume
+        volume: item.volume,
+        highPrice: item.highPrice,
+        lowPrice: item.lowPrice,
       }
     }) as ITicker[];
 
@@ -60,7 +62,9 @@ const Home: NextPage = () => {
         volume: item.volume,
         rank: item.rank,
         tags: item.tags,
-        priceChangePercent: ticker.priceChangePercent
+        priceChangePercent: ticker.priceChangePercent,        
+        highPrice: ticker.highPrice,
+        lowPrice: ticker.lowPrice,
       }
     }) as IFinalData[];
     return result;
@@ -75,57 +79,50 @@ const Home: NextPage = () => {
   });
 
   const finalData = combinedData.filter((p) => {
-    if(searchKey === "") return combinedData;
-    return p.name.toLowerCase().includes(searchKey.toLowerCase()) || p.fullName.toLowerCase().includes(searchKey.toLowerCase());
+    if (searchKey === "" && selectedPill === "") return combinedData;
+    if (selectedPill === "") return (p.name.toLowerCase().includes(searchKey.toLowerCase()) || p.fullName.toLowerCase().includes(searchKey.toLowerCase()));
+    return (p.name.toLowerCase().includes(searchKey.toLowerCase()) || p.fullName.toLowerCase().includes(searchKey.toLowerCase())) && p.tags.includes(selectedPill);
   })
 
-  const renderTable = () => {
-    if (symbolList.isLoading) {
-      return (
-        <div>Loading...</div>
-      )
-    }
+  const renderHeader = () => {
     return (
-      <>
-        <table className="table-crypto">
-          <thead>
-            <tr>
-              <th className="w-1/12"></th>
-              <th className="w-3/12">Crypto</th>
-              <th className="w-2/12"></th>
-              <th className="w-2/12">Harga</th>
-              <th className="w-1/12">24 Jam</th>
-              <th className="w-1/12">Volume</th>
-            </tr>
-          </thead>
-          <tbody>
-            {(!symbolList.isLoading && !tickerList.isLoading) && finalData.map((item: IFinalData, index: number) => {
-              const isPositive = Number(item.priceChangePercent) == 0 ? "text-white" : Number(item.priceChangePercent) >= 0 ? "text-green-400" : "text-red-400";
-              return (
-                <tr key={item.symbol}>
-                  <td>
-                    <div
-                      className="h-10 w-10"
-                      style={{
-                        backgroundImage: `url('${item.logo}')`,
-                        backgroundSize: "contain"
-                      }}
-                    /> </td>
-                  <td>{item.fullName}</td>
-                  <td>{item.name}</td>
-                  <td>{Number(item.price)}</td>
-                  <td>
-                    <span className={isPositive}>
-                      {Number(item.priceChangePercent)}%
-                    </span>
-                  </td>
-                  <td>{Number(item.volume)}</td>
-                </tr>
-              )
-            })}
-          </tbody>
-        </table>
-      </>
+      <div className="flex my-4">
+        <div className="font-bold text-2xl">
+          Harga Crypto dalam Rupiah Hari Ini
+        </div>
+        <div className="ml-auto">
+          <SearchBox value={searchKey} setSearchKey={setSearchKey} />
+        </div>
+      </div>
+    )
+  }
+
+  const renderPillList = () => {
+    return (
+      <div className="flex justify-start mt-8 pb-4 overflow-auto">
+        {TAGS.map((item: ITag, index: number) => {
+          return (
+            <PillText key={index} text={item.name} tag={item.tag} setSelectedPill={setSelectedPill} />
+          )
+        })}
+      </div>
+    )
+  }
+
+  const renderTable = () => {
+    if (symbolList.isLoading || tickerList.isLoading) {
+      return;
+    }
+    
+    const tableHeader = TABLE_CRYPTO_HEADER as ITableHeader[];
+    const tableRow = (!symbolList.isLoading && !tickerList.isLoading) && finalData.map((item: IFinalData, index: number) =>       
+        <TableTokenRow key={index} row={item} />       
+    )
+
+    return (
+      <div className="my-4">
+        <DataTable headerList={tableHeader} data={tableRow} />
+      </div>
     );
   }
 
@@ -139,27 +136,9 @@ const Home: NextPage = () => {
       </Head>
 
       <main className="container mx-auto">
-        <div className="flex my-4">
-          <div className="font-bold text-2xl">
-            Harga Crypto dalam Rupiah Hari Ini
-          </div>
-          <div className="ml-auto">
-            <SearchBox setSearchKey={setSearchKey} />
-          </div>
-        </div>
-
-        <div className="flex mt-8 overflow-auto">
-          {TAGS.map((item: any, index: number) => {
-            return (
-              <PillText key={index} text={item.name} />
-            )
-          })}
-        </div>
-
-        <div className="my-4">
-          {renderTable()}
-        </div>
-
+        {renderHeader()}
+        {renderPillList()}
+        {renderTable()}
       </main>
 
     </>

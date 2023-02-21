@@ -3,7 +3,9 @@ export interface ITicker {
   priceChange: string,
   priceChangePercent: string,
   lastPrice: number,
-  volume: string
+  volume: string,
+  highPrice: number,
+  lowPrice: number,
 }
 
 export interface ISymbol {
@@ -27,5 +29,11 @@ export interface IFinalData {
   rank: number,
   tags: string[],
   priceChangePercent: string,
+  highPrice: number,
+  lowPrice: number,
 }
 
+export interface ITag {
+  name: string,
+  tag: string
+}

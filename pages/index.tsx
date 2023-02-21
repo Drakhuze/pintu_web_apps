@@ -3,7 +3,7 @@ import Head from 'next/head';
 import PillText from '@/components/PillText';
 import { useQuery } from 'react-query';
 import { NextPage } from 'next';
-import { TABLE_CRYPTO_HEADER, TAGS } from '@/constants';
+import { Api, TABLE_CRYPTO_HEADER, TAGS } from '@/constants';
 import {
   IFinalData, ISymbol, ITag, ITicker,
 } from '@/interfaces';
@@ -11,8 +11,8 @@ import SearchBox from '@/components/SearchBox';
 import DataTable, { ITableHeader } from '@/components/DataTable';
 import TableTokenRow from '@/components/TableTokenRow';
 
-const getSymbolList = async () => (await fetch('https://www.binance.com/bapi/composite/v1/public/marketing/symbol/list')).json();
-const getTickerList = async () => (await fetch('https://api.binance.com/api/v3/ticker/24hr')).json();
+const getSymbolList = async () => (await fetch(Api.symbolList)).json();
+const getTickerList = async () => (await fetch(Api.ticker)).json();
 
 const Home: NextPage = () => {
   const [searchKey, setSearchKey] = useState('');

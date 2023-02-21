@@ -1,4 +1,4 @@
-export const Api = {
+export const API = {
   symbolList: 'https://www.binance.com/bapi/composite/v1/public/marketing/symbol/list',
   ticker: 'https://api.binance.com/api/v3/ticker/24hr',
 };
@@ -45,3 +45,4 @@ export const TABLE_CRYPTO_HEADER = [
 ];
 
 export const USD_TO_IDR_DEFAULT = 15197.10;
+export const REFETCH_INTERVAL = 5000;

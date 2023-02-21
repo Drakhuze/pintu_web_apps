@@ -3,7 +3,9 @@ import Head from 'next/head';
 import PillText from '@/components/PillText';
 import { useQuery } from 'react-query';
 import { NextPage } from 'next';
-import { Api, TABLE_CRYPTO_HEADER, TAGS } from '@/constants';
+import {
+  API, REFETCH_INTERVAL, TABLE_CRYPTO_HEADER, TAGS,
+} from '@/constants';
 import {
   IFinalData, ISymbol, ITag, ITicker,
 } from '@/interfaces';
@@ -11,8 +13,8 @@ import SearchBox from '@/components/SearchBox';
 import DataTable, { ITableHeader } from '@/components/DataTable';
 import TableTokenRow from '@/components/TableTokenRow';
 
-const getSymbolList = async () => (await fetch(Api.symbolList)).json();
-const getTickerList = async () => (await fetch(Api.ticker)).json();
+const getSymbolList = async () => (await fetch(API.symbolList)).json();
+const getTickerList = async () => (await fetch(API.ticker)).json();
 
 const Home: NextPage = () => {
   const [searchKey, setSearchKey] = useState('');
@@ -20,7 +22,7 @@ const Home: NextPage = () => {
 
   const symbolList = useQuery('symbolList', getSymbolList);
   const tickerList = useQuery('tickerList', getTickerList, {
-    refetchInterval: 3000,
+    refetchInterval: REFETCH_INTERVAL,
   });
 
   useEffect(() => {
@@ -97,7 +99,7 @@ const Home: NextPage = () => {
   );
 
   const renderPillList = () => (
-    <div className="flex justify-start mt-8 pb-4 overflow-y-auto scrollbar">
+    <div className="flex justify-start mt-8 pb-4 overflow-x-auto scrollbar">
       {TAGS.map((item: ITag) => (
         <PillText
           key={item.tag}

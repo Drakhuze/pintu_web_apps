@@ -1,58 +1,57 @@
-import Head from 'next/head'
-import PillText from "@/components/PillText"
+/* eslint-disable react/function-component-definition */
+import React, { useEffect, useState } from 'react';
+import Head from 'next/head';
+import PillText from '@/components/PillText';
 import { useQuery } from 'react-query';
-import { NextPage } from "next";
-import { TABLE_CRYPTO_HEADER, TAGS, USD_TO_IDR_DEFAULT } from "@/constants";
-import { IFinalData, ISymbol, ITag, ITicker } from "@/interfaces";
-import { useContext, useEffect, useMemo, useState } from "react";
-import SearchBox from "@/components/SearchBox";
-import DataTable, { ITableHeader } from "@/components/DataTable";
-import TableTokenRow from "@/components/TableTokenRow";
+import { NextPage } from 'next';
+import { TABLE_CRYPTO_HEADER, TAGS } from '@/constants';
+import {
+  IFinalData, ISymbol, ITag, ITicker,
+} from '@/interfaces';
+import SearchBox from '@/components/SearchBox';
+import DataTable, { ITableHeader } from '@/components/DataTable';
+import TableTokenRow from '@/components/TableTokenRow';
 
-const getSymbolList = async () => await (await fetch("https://www.binance.com/bapi/composite/v1/public/marketing/symbol/list")).json();
-const getTickerList = async () => await (await fetch("https://api.binance.com/api/v3/ticker/24hr")).json();
+const getSymbolList = async () => (await fetch('https://www.binance.com/bapi/composite/v1/public/marketing/symbol/list')).json();
+const getTickerList = async () => (await fetch('https://api.binance.com/api/v3/ticker/24hr')).json();
 
 const Home: NextPage = () => {
-  const [searchKey, setSearchKey] = useState("");
-  const [selectedPill, setSelectedPill] = useState("");
+  const [searchKey, setSearchKey] = useState('');
+  const [selectedPill, setSelectedPill] = useState('');
 
-  const symbolList = useQuery("symbolList", getSymbolList);
-  const tickerList = useQuery("tickerList", getTickerList, {
-    refetchInterval: 3000
+  const symbolList = useQuery('symbolList', getSymbolList);
+  const tickerList = useQuery('tickerList', getTickerList, {
+    refetchInterval: 3000,
   });
 
   useEffect(() => {
-    setSearchKey("");
-  }, [selectedPill])
+    setSearchKey('');
+  }, [selectedPill]);
 
   const getCombinedData = () => {
-    const symbols = symbolList.data?.data.map((item: ISymbol, index: number) => {
-      return {
-        symbol: item.symbol,
-        name: item.name,
-        fullName: item.fullName,
-        logo: item.logo,
-        price: item.price,
-        volume: item.volume,
-        rank: item.rank,
-        tags: item.tags,
-      }
-    }) as ISymbol[];
+    const symbols = symbolList.data?.data.map((item: ISymbol) => ({
+      symbol: item.symbol,
+      name: item.name,
+      fullName: item.fullName,
+      logo: item.logo,
+      price: item.price,
+      volume: item.volume,
+      rank: item.rank,
+      tags: item.tags,
+    })) as ISymbol[];
 
-    const tickers = tickerList.data.map((item: ITicker, index: number) => {
-      return {
-        symbol: item.symbol,
-        priceChange: item.priceChange,
-        priceChangePercent: item.priceChangePercent,
-        lastPrice: item.lastPrice,
-        volume: item.volume,
-        highPrice: item.highPrice,
-        lowPrice: item.lowPrice,
-      }
-    }) as ITicker[];
+    const tickers = tickerList.data.map((item: ITicker) => ({
+      symbol: item.symbol,
+      priceChange: item.priceChange,
+      priceChangePercent: item.priceChangePercent,
+      lastPrice: item.lastPrice,
+      volume: item.volume,
+      highPrice: item.highPrice,
+      lowPrice: item.lowPrice,
+    })) as ITicker[];
 
-    const result = symbols.map((item: ISymbol, index: number) => {
-      const ticker = tickers.filter(p => p.symbol === item.symbol)[0];
+    const result = symbols.map((item: ISymbol) => {
+      const ticker = tickers.filter((p) => p.symbol === item.symbol)[0];
       return {
         symbol: item.symbol,
         name: item.name,
@@ -62,10 +61,10 @@ const Home: NextPage = () => {
         volume: item.volume,
         rank: item.rank,
         tags: item.tags,
-        priceChangePercent: ticker.priceChangePercent,        
+        priceChangePercent: ticker.priceChangePercent,
         highPrice: ticker.highPrice,
         lowPrice: ticker.lowPrice,
-      }
+      };
     }) as IFinalData[];
     return result;
   };
@@ -74,57 +73,58 @@ const Home: NextPage = () => {
 
   combinedData.sort((a, b) => {
     if (a.rank === null) return 1;
-    else if (b.rank === null) return -1;
-    else return a.rank < b.rank ? -1 : 1;
+    if (b.rank === null) return -1;
+    return a.rank < b.rank ? -1 : 1;
   });
 
   const finalData = combinedData.filter((p) => {
-    if (searchKey === "" && selectedPill === "") return combinedData;
-    if (selectedPill === "") return (p.name.toLowerCase().includes(searchKey.toLowerCase()) || p.fullName.toLowerCase().includes(searchKey.toLowerCase()));
-    return (p.name.toLowerCase().includes(searchKey.toLowerCase()) || p.fullName.toLowerCase().includes(searchKey.toLowerCase())) && p.tags.includes(selectedPill);
-  })
+    if (searchKey === '' && selectedPill === '') return combinedData;
+    if (selectedPill === '') return (p.name.toLowerCase().includes(searchKey.toLowerCase()) || p.fullName.toLowerCase().includes(searchKey.toLowerCase()));
 
-  const renderHeader = () => {
-    return (
-      <div className="flex my-4">
-        <div className="font-bold text-2xl">
-          Harga Crypto dalam Rupiah Hari Ini
-        </div>
-        <div className="ml-auto">
-          <SearchBox value={searchKey} setSearchKey={setSearchKey} />
-        </div>
-      </div>
-    )
-  }
+    return (p.name.toLowerCase().includes(searchKey.toLowerCase())
+    || p.fullName.toLowerCase().includes(searchKey.toLowerCase()))
+    && p.tags.includes(selectedPill);
+  });
 
-  const renderPillList = () => {
-    return (
-      <div className="flex justify-start mt-8 pb-4 overflow-auto">
-        {TAGS.map((item: ITag, index: number) => {
-          return (
-            <PillText key={index} text={item.name} tag={item.tag} setSelectedPill={setSelectedPill} />
-          )
-        })}
+  const renderHeader = () => (
+    <div className="flex my-4">
+      <div className="font-bold text-2xl">
+        Harga Crypto dalam Rupiah Hari Ini
       </div>
-    )
-  }
+      <div className="ml-auto">
+        <SearchBox value={searchKey} setSearchKey={setSearchKey} />
+      </div>
+    </div>
+  );
+
+  const renderPillList = () => (
+    <div className="flex justify-start mt-8 pb-4 overflow-auto">
+      {TAGS.map((item: ITag) => (
+        <PillText
+          key={item.tag}
+          text={item.name}
+          tag={item.tag}
+          setSelectedPill={setSelectedPill}
+        />
+      ))}
+    </div>
+  );
 
   const renderTable = () => {
-    if (symbolList.isLoading || tickerList.isLoading) {
-      return;
+    if (!symbolList.isLoading && !tickerList.isLoading) {
+      const tableHeader = TABLE_CRYPTO_HEADER as ITableHeader[];
+      const tableRow = (!symbolList.isLoading && !tickerList.isLoading)
+      && finalData.map((item: IFinalData) => (
+        <TableTokenRow key={item.name} row={item} />
+      ));
+      return (
+        <div className="my-4">
+          <DataTable headerList={tableHeader} data={tableRow} />
+        </div>
+      );
     }
-    
-    const tableHeader = TABLE_CRYPTO_HEADER as ITableHeader[];
-    const tableRow = (!symbolList.isLoading && !tickerList.isLoading) && finalData.map((item: IFinalData, index: number) =>       
-        <TableTokenRow key={index} row={item} />       
-    )
-
-    return (
-      <div className="my-4">
-        <DataTable headerList={tableHeader} data={tableRow} />
-      </div>
-    );
-  }
+    return <div />;
+  };
 
   return (
     <>
@@ -142,7 +142,7 @@ const Home: NextPage = () => {
       </main>
 
     </>
-  )
-}
+  );
+};
 
 export default Home;

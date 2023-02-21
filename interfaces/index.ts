@@ -19,7 +19,7 @@ export interface ISymbol {
   tags: string[],
 }
 
-export interface IFinalData {  
+export interface IFinalData {
   symbol: string,
   name: string,
   fullName: string,

@@ -1,9 +1,9 @@
-import { IFinalData } from "@/interfaces";
+import React from 'react';
 
 export interface ITableHeader {
-  title: string | JSX.Element,
+  title: string,
   width?: string,
-  itemAlign?: "left" | "center" | "right" | "",
+  itemAlign?: 'left' | 'center' | 'right' | '',
 }
 
 interface Props {
@@ -11,27 +11,23 @@ interface Props {
   data: any,
 }
 
-const DataTable = (props: Props) => {
+function DataTable({ headerList, data }: Props) {
   return (
     <div>
       <table className="datatable w-full table-fixed">
         <thead className="hidden lg:table-header-group">
           <tr>
-            {props.headerList.map((item: ITableHeader, index: number) => {
-              return (
-                <th key={index} className={`text-${item.itemAlign}`} style={{width: `${item.width}`}}>{item.title}</th>
-              )
-            })}
+            {headerList.map((item: ITableHeader) => (
+              <th key={item.title} className={`text-${item.itemAlign}`} style={{ width: `${item.width}` }}>{item.title}</th>
+            ))}
           </tr>
         </thead>
         <tbody>
-          {props.data.map((item: JSX.Element, index: number) => {
-            return item;
-          })}
+          {data.map((item: JSX.Element) => item)}
         </tbody>
       </table>
     </div>
-  )
+  );
 }
 
 export default DataTable;

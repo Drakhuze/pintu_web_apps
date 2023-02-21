@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import Head from 'next/head';
 import PillText from '@/components/PillText';
 import { useQuery } from 'react-query';
@@ -29,7 +29,11 @@ const Home: NextPage = () => {
     setSearchKey('');
   }, [selectedPill]);
 
-  const getCombinedData = () => {
+  const combinedData = useMemo(() => {
+    if (symbolList === undefined && tickerList === undefined) {
+      return [];
+    }
+
     const symbols = symbolList.data?.data.map((item: ISymbol) => ({
       symbol: item.symbol,
       name: item.name,
@@ -41,7 +45,7 @@ const Home: NextPage = () => {
       tags: item.tags,
     })) as ISymbol[];
 
-    const tickers = tickerList.data.map((item: ITicker) => ({
+    const tickers = tickerList.data?.map((item: ITicker) => ({
       symbol: item.symbol,
       priceChange: item.priceChange,
       priceChangePercent: item.priceChangePercent,
@@ -51,34 +55,35 @@ const Home: NextPage = () => {
       lowPrice: item.lowPrice,
     })) as ITicker[];
 
-    const result = symbols.map((item: ISymbol) => {
-      const ticker = tickers.filter((p) => p.symbol === item.symbol)[0];
+    const result = symbols?.map((item: ISymbol) => {
+      const ticker = tickers?.filter((p) => p.symbol === item.symbol)[0];
       return {
         symbol: item.symbol,
         name: item.name,
         fullName: item.fullName,
         logo: item.logo,
-        price: ticker.lastPrice,
+        price: ticker?.lastPrice,
         volume: item.volume,
         rank: item.rank,
         tags: item.tags,
-        priceChangePercent: ticker.priceChangePercent,
-        highPrice: ticker.highPrice,
-        lowPrice: ticker.lowPrice,
+        priceChangePercent: ticker?.priceChangePercent,
+        highPrice: ticker?.highPrice,
+        lowPrice: ticker?.lowPrice,
       };
     }) as IFinalData[];
     return result;
-  };
+  }, [symbolList, tickerList]);
 
-  const combinedData = (symbolList.isSuccess && tickerList.isSuccess) ? getCombinedData() : [];
+  // const combinedData = (symbolList.isSuccess && tickerList.isSuccess) ? getCombinedData() : [];
+  if (combinedData !== undefined) {
+    combinedData?.sort((a, b) => {
+      if (a.rank === null) return 1;
+      if (b.rank === null) return -1;
+      return a.rank < b.rank ? -1 : 1;
+    });
+  }
 
-  combinedData.sort((a, b) => {
-    if (a.rank === null) return 1;
-    if (b.rank === null) return -1;
-    return a.rank < b.rank ? -1 : 1;
-  });
-
-  const finalData = combinedData.filter((p) => {
+  const finalData = combinedData === undefined ? [] : combinedData?.filter((p) => {
     if (searchKey === '' && selectedPill === '') return combinedData;
     if (selectedPill === '') return (p.name.toLowerCase().includes(searchKey.toLowerCase()) || p.fullName.toLowerCase().includes(searchKey.toLowerCase()));
 
@@ -88,7 +93,7 @@ const Home: NextPage = () => {
   });
 
   const renderHeader = () => (
-    <div className="flex my-4">
+    <div className="flex m-4">
       <div className="font-bold text-2xl text-left">
         Harga Crypto dalam Rupiah Hari Ini
       </div>
@@ -99,7 +104,7 @@ const Home: NextPage = () => {
   );
 
   const renderPillList = () => (
-    <div className="flex justify-start mt-8 pb-4 overflow-x-auto scrollbar">
+    <div className="flex m-4 justify-start mt-8 pb-4 overflow-x-auto scrollbar">
       {TAGS.map((item: ITag) => (
         <PillText
           key={item.tag}
@@ -119,7 +124,7 @@ const Home: NextPage = () => {
         <TableTokenRow key={item.name} row={item} />
       ));
       return (
-        <div className="my-4">
+        <div className="m-4">
           <DataTable headerList={tableHeader} data={tableRow} />
         </div>
       );

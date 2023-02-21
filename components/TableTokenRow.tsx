@@ -108,47 +108,34 @@ function TableTokenRow({ row }: Props) {
         </td>
       </tr>
 
-      <tr className="flex flex-col lg:hidden table-token-row-sm transtition ease-in-out duration-200 hover:bg-slate-900">
-        <div className="flex items-center">
-          <td className="p-0">
-            <div
-              className="h-10 w-10"
-              style={{
-                backgroundImage: `url('${row.logo}')`,
-                backgroundSize: 'contain',
-              }}
-            />
-          </td>
-          <div className="flex flex-col">
-            <td>{row.fullName}</td>
-            <td className="text-neutral-500">{row.name}</td>
-          </div>
-          <div className="flex flex-col ml-auto text-right">
-            <td>
-              <span className={`${changePriceColor}`}>
-                {formattedPrice}
-              </span>
-            </td>
-            <td>
-              <span className={`${percentColor} flex justify-end`}>
-                {Number(row.priceChangePercent).toFixed(2)}
-                %
-              </span>
-            </td>
-          </div>
-        </div>
-        {/* <td className="flex">
-            Low Price
-            <span className={`${changeLowPriceColor} ml-auto`}>
-              {formattedLowPrice}
+      <tr className="flex lg:hidden items-center table-token-row-sm transtition ease-in-out duration-200 hover:bg-slate-900">
+        <td className="p-0">
+          <div
+            className="h-10 w-10 "
+            style={{
+              backgroundImage: `url('${row.logo}')`,
+              backgroundSize: 'contain',
+            }}
+          />
+        </td>
+        <td className="flex flex-col">
+          <span>{row.fullName}</span>
+          <span className="text-neutral-500">{row.name}</span>
+        </td>
+        <td className="flex flex-col ml-auto text-right">
+          <div>
+            <span className={`${changePriceColor}`}>
+              {formattedPrice}
             </span>
-          </td>
-          <td className="flex">
-            High Price
-            <span className={`${changeHighPriceColor} ml-auto`}>
-              {formattedHighPrice}
+          </div>
+          <div>
+            <span className={`${percentColor} flex justify-end`}>
+              {Number(row.priceChangePercent).toFixed(2)}
+              %
             </span>
-          </td> */}
+          </div>
+        </td>
+
       </tr>
     </>
   );

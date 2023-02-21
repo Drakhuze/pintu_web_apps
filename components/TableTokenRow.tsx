@@ -1,6 +1,4 @@
 import React, { useState } from 'react';
-import ChevronDown from '@/assets/ChevronDown';
-import ChevronUp from '@/assets/ChevronUp';
 import { USD_TO_IDR_DEFAULT } from '@/constants';
 import { IFinalData } from '@/interfaces';
 
@@ -96,11 +94,6 @@ function TableTokenRow({ row }: Props) {
             </td>
             <td>
               <span className={`${percentColor} flex justify-end`}>
-                {
-                  (Number(row.priceChangePercent) !== 0)
-                    && Number(row.priceChangePercent) >= 0
-                    ? <ChevronUp className="h-6" /> : <ChevronDown className="h-6" />
-                }
                 {Number(row.priceChangePercent)}
                 %
               </span>

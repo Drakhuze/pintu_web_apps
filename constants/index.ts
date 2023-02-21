@@ -1,0 +1,16 @@
+export const TAGS = [
+  { tag: "", name: "All" },
+  { tag: "Metaverse", name: "Metaverse" },
+  { tag: "Gaming", name: "Gaming" },
+  { tag: "defi", name: "DeFi" },
+  { tag: "innovation-zone", name: "Innovation" },
+  { tag: "NFT", name: "NFT" },
+  { tag: "storage-zone", name: "Storage" },
+  { tag: "Polkadot", name: "Polkadot" },
+  { tag: "pos", name: "POS" },
+  { tag: "pow", name: "POW" },
+  { tag: "Launchpad", name: "Launchpad" },
+  { tag: "Launchpool", name: "Launchpool" },
+  { tag: "BSC", name: "BSC" },
+  { tag: "ETF", name: "ETF" },
+];

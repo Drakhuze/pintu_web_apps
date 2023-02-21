@@ -2,6 +2,19 @@
 @tailwind components;
 @tailwind utilities;
 
+.table-crypto {
+  @apply w-full;
+}
+.table-crypto > thead > tr > th {
+  @apply p-4 text-left;
+}
+.table-crypto > tbody > tr > td {
+  @apply p-4;
+}
+.table-crypto > thead, tbody > tr{
+    @apply border border-neutral-800;  
+}
+
 :root {
   --max-width: 1100px;
   --border-radius: 12px;

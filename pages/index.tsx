@@ -68,7 +68,7 @@ const Home: NextPage = () => {
     return result;
   };
 
-  const combinedData = (!symbolList.isLoading && !tickerList.isLoading) ? getCombinedData() : [];
+  const combinedData = (symbolList.isSuccess && tickerList.isSuccess) ? getCombinedData() : [];
 
   combinedData.sort((a, b) => {
     if (a.rank === null) return 1;
@@ -87,7 +87,7 @@ const Home: NextPage = () => {
 
   const renderHeader = () => (
     <div className="flex my-4">
-      <div className="font-bold text-2xl">
+      <div className="font-bold text-2xl text-left">
         Harga Crypto dalam Rupiah Hari Ini
       </div>
       <div className="ml-auto">
@@ -97,7 +97,7 @@ const Home: NextPage = () => {
   );
 
   const renderPillList = () => (
-    <div className="flex justify-start mt-8 pb-4 overflow-auto">
+    <div className="flex justify-start mt-8 pb-4 overflow-y-auto scrollbar">
       {TAGS.map((item: ITag) => (
         <PillText
           key={item.tag}
@@ -125,11 +125,17 @@ const Home: NextPage = () => {
     return <div />;
   };
 
+  const renderLoading = () => (
+    <div className="text-center p-8">
+      Loading...
+    </div>
+  );
+
   return (
     <>
       <Head>
         <title>Pintu</title>
-        <meta name="description" content="Created By : Steven Setiawan Kusuma" />
+        <meta name="description" content="Created By : Steven" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
@@ -137,6 +143,7 @@ const Home: NextPage = () => {
       <main className="container mx-auto">
         {renderHeader()}
         {renderPillList()}
+        {(symbolList.isLoading || tickerList.isLoading) && renderLoading()}
         {renderTable()}
       </main>
 

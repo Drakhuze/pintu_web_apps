@@ -10,7 +10,6 @@ export const TAGS = [
   { tag: 'Gaming', name: 'Gaming' },
   { tag: 'innovation-zone', name: 'Innovation' },
   { tag: 'fan_token', name: 'Fan Token' },
-  { tag: 'NFT', name: 'NFT' },
   { tag: 'storage-zone', name: 'Storage' },
   { tag: 'Polkadot', name: 'Polkadot' },
   { tag: 'pos', name: 'POS' },
@@ -22,13 +21,27 @@ export const TAGS = [
 ];
 
 export const TABLE_CRYPTO_HEADER = [
-  { title: '', width: '10%', itemAlign: 'left' },
-  { title: 'Crypto', width: '20%', itemAlign: 'left' },
-  { title: '', width: '10%', itemAlign: 'left' },
-  { title: 'Harga', width: '18%', itemAlign: 'right' },
-  { title: '24 Jam', width: '12%', itemAlign: 'right' },
-  { title: 'Low Price', width: '18%', itemAlign: 'right' },
-  { title: 'High Price', width: '18%', itemAlign: 'right' },
+  {
+    id: 1, title: '', width: '10%', itemAlign: 'left',
+  },
+  {
+    id: 2, title: 'Crypto', width: '20%', itemAlign: 'left',
+  },
+  {
+    id: 3, title: '', width: '10%', itemAlign: 'left',
+  },
+  {
+    id: 4, title: 'Harga', width: '18%', itemAlign: 'right',
+  },
+  {
+    id: 5, title: '24 Jam', width: '12%', itemAlign: 'right',
+  },
+  {
+    id: 6, title: 'Low Price', width: '18%', itemAlign: 'right',
+  },
+  {
+    id: 7, title: 'High Price', width: '18%', itemAlign: 'right',
+  },
 ];
 
 export const USD_TO_IDR_DEFAULT = 15197.10;

@@ -36,10 +36,10 @@ function TableTokenRow({ row }: Props) {
 
   return (
     <>
-      <tr key={row.symbol} className="table-token-row hidden lg:table-row">
+      <tr key={row.logo} className="table-token-row hidden lg:table-row transtition ease-in-out duration-200 hover:bg-slate-900">
         <td>
           <div
-            className="h-10 w-10"
+            className="h-10 w-10 rounded-full"
             style={{
               backgroundImage: `url('${row.logo}')`,
               backgroundSize: 'contain',
@@ -47,7 +47,7 @@ function TableTokenRow({ row }: Props) {
           />
         </td>
         <td className="">{row.fullName}</td>
-        <td className="">{row.name}</td>
+        <td className="text-neutral-500">{row.name}</td>
         <td className="text-right">
           <span className={changePriceColor}>
             {formattedPrice}
@@ -55,7 +55,7 @@ function TableTokenRow({ row }: Props) {
         </td>
         <td className="text-right">
           <span className={`${percentColor}`}>
-            {Number(row.priceChangePercent)}
+            {Number(row.priceChangePercent).toFixed(2)}
             %
           </span>
         </td>
@@ -71,7 +71,7 @@ function TableTokenRow({ row }: Props) {
         </td>
       </tr>
 
-      <tr className="flex flex-col lg:hidden table-token-row-sm">
+      <tr className="flex flex-col lg:hidden table-token-row-sm transtition ease-in-out duration-200 hover:bg-slate-900">
         <div className="flex items-center">
           <td className="p-0">
             <div
@@ -84,7 +84,7 @@ function TableTokenRow({ row }: Props) {
           </td>
           <div className="flex flex-col">
             <td>{row.fullName}</td>
-            <td>{row.name}</td>
+            <td className="text-neutral-500">{row.name}</td>
           </div>
           <div className="flex flex-col ml-auto text-right">
             <td>
@@ -94,7 +94,7 @@ function TableTokenRow({ row }: Props) {
             </td>
             <td>
               <span className={`${percentColor} flex justify-end`}>
-                {Number(row.priceChangePercent)}
+                {Number(row.priceChangePercent).toFixed(2)}
                 %
               </span>
             </td>

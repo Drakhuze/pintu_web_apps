@@ -1,6 +1,7 @@
 import React from 'react';
 
 export interface ITableHeader {
+  id: number,
   title: string,
   width?: string,
   itemAlign?: 'left' | 'center' | 'right' | '',
@@ -8,7 +9,7 @@ export interface ITableHeader {
 
 interface Props {
   headerList: ITableHeader[],
-  data: any,
+  data: any
 }
 
 function DataTable({ headerList, data }: Props) {
@@ -18,12 +19,20 @@ function DataTable({ headerList, data }: Props) {
         <thead className="hidden lg:table-header-group">
           <tr>
             {headerList.map((item: ITableHeader) => (
-              <th key={item.title} className={`text-${item.itemAlign}`} style={{ width: `${item.width}` }}>{item.title}</th>
+              <th key={item.id} className={`text-${item.itemAlign}`} style={{ width: `${item.width}` }}>{item.title}</th>
             ))}
           </tr>
         </thead>
         <tbody>
-          {data.map((item: JSX.Element) => item)}
+          {
+            data.length === 0
+            && (
+              <tr>
+                <td className="p-4 text-center" colSpan={7}>No Data</td>
+              </tr>
+            )
+          }
+          {data.length > 0 && data.map((item: JSX.Element) => item)}
         </tbody>
       </table>
     </div>

@@ -21,6 +21,25 @@
   @apply p-1;
 }
 
+@layer utilities {
+  .scrollbar::-webkit-scrollbar {
+      width: 1px;
+  }
+
+  .scrollbar::-webkit-scrollbar-track {
+      border-radius: 100vh;
+      @apply bg-neutral-900
+  }
+
+  .scrollbar::-webkit-scrollbar-thumb {
+      @apply border-neutral-700 bg-gray-800 rounded
+  }
+
+  .scrollbar::-webkit-scrollbar-thumb:hover {
+      @apply bg-gray-700
+  }
+}
+
 :root {
   --max-width: 1100px;
   --border-radius: 12px;

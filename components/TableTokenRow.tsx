@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { USD_TO_IDR_DEFAULT } from '@/constants';
 import { IFinalData } from '@/interfaces';
 

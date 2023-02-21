@@ -1,4 +1,3 @@
-/* eslint-disable react/function-component-definition */
 import React, { useEffect, useState } from 'react';
 import Head from 'next/head';
 import PillText from '@/components/PillText';

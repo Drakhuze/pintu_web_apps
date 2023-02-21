@@ -9,6 +9,8 @@
   },
   "rules": {
     "linebreak-style": 0,
-    "prefer-destructuring": "off"
+    "react/jsx-props-no-spreading": "off",
+    "react/function-component-definition": "off",
+    "no-nested-ternary": "off"
   }
 }

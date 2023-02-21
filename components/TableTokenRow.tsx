@@ -1,4 +1,3 @@
-/* eslint-disable no-nested-ternary */
 import React, { useState } from 'react';
 import ChevronDown from '@/assets/ChevronDown';
 import ChevronUp from '@/assets/ChevronUp';

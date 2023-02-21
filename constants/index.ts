@@ -31,16 +31,16 @@ export const TABLE_CRYPTO_HEADER = [
     id: 3, title: '', width: '10%', itemAlign: 'left',
   },
   {
-    id: 4, title: 'Harga', width: '18%', itemAlign: 'right',
+    id: 4, title: 'Harga', width: '15%', itemAlign: 'left',
   },
   {
     id: 5, title: '24 Jam', width: '12%', itemAlign: 'right',
   },
   {
-    id: 6, title: 'Low Price', width: '18%', itemAlign: 'right',
+    id: 6, title: 'Low Price', width: '15%', itemAlign: 'right',
   },
   {
-    id: 7, title: 'High Price', width: '18%', itemAlign: 'right',
+    id: 7, title: 'High Price', width: '15%', itemAlign: 'right',
   },
 ];
 

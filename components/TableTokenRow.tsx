@@ -48,7 +48,7 @@ function TableTokenRow({ row }: Props) {
         </td>
         <td className="">{row.fullName}</td>
         <td className="text-neutral-500">{row.name}</td>
-        <td className="text-right">
+        <td className="text-left">
           <span className={changePriceColor}>
             {formattedPrice}
           </span>

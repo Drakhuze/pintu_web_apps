@@ -93,8 +93,8 @@ const Home: NextPage = () => {
   });
 
   const renderHeader = () => (
-    <div className="flex m-4">
-      <div className="font-bold text-2xl text-left">
+    <div className="flex m-4 items-center">
+      <div className="font-bold text-2xl text-left mr-2">
         Harga Crypto dalam Rupiah Hari Ini
       </div>
       <div className="ml-auto">

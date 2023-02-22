@@ -16,15 +16,13 @@ function TableTokenRow({ row }: Props) {
   const [lowPrice, setLowPrice] = useState(row.lowPrice);
   const [highPrice, setHighPrice] = useState(row.highPrice);
 
-  const percentColor = Number(row.priceChangePercent) === 0 ? 'text-white' : Number(row.priceChangePercent) >= 0 ? 'text-green-400' : 'text-red-400';
+  const [changePriceColor, setChangePriceColor] = useState('text-white');
+  const [changeLowPriceColor, setChangeLowPriceColor] = useState('text-white');
+  const [changeHighPriceColor, setChangeHighPriceColor] = useState('text-white');
 
   const isChangePrice = Number(price) !== Number(row.price);
   const isChangeLowPrice = Number(lowPrice) !== Number(row.lowPrice);
   const isChangeHighPrice = Number(highPrice) !== Number(row.highPrice);
-
-  const [changePriceColor, setChangePriceColor] = useState('text-white');
-  const [changeLowPriceColor, setChangeLowPriceColor] = useState('text-white');
-  const [changeHighPriceColor, setChangeHighPriceColor] = useState('text-white');
 
   const rupiahPrice = (Number(row.price) * Number(USD_TO_IDR_DEFAULT));
   const rupiahLowPrice = (Number(row.lowPrice) * Number(USD_TO_IDR_DEFAULT));
@@ -33,6 +31,8 @@ function TableTokenRow({ row }: Props) {
   const formattedPrice = currencyFormatter.format(rupiahPrice);
   const formattedLowPrice = currencyFormatter.format(rupiahLowPrice);
   const formattedHighPrice = currencyFormatter.format(rupiahHighPrice);
+
+  const percentColor = Number(row.priceChangePercent) === 0 ? 'text-white' : Number(row.priceChangePercent) > 0 ? 'text-green-400' : 'text-red-400';
 
   useEffect(() => {
     setPrice(row.price);
@@ -73,8 +73,8 @@ function TableTokenRow({ row }: Props) {
 
   return (
     <>
-      <tr key={row.logo} className="table-token-row hidden lg:table-row transtition ease-in-out duration-200 hover:bg-slate-900">
-        <td>
+      <tr key={row.name} className="table-token-row hidden lg:table-row transtition ease-in-out duration-200 hover:bg-slate-900">
+        <td className="text-white transition ease-in-out duration-1000">
           <div
             className="h-10 w-10 rounded-full"
             style={{

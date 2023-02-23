@@ -10,9 +10,7 @@ Automatic deployment with Vercel and improved code quality with ESLint.
 
 Note : This application was made using Binance Public API (I did not use the API provided by Pintu because one of the API that was provided cannot be accessed using my connection), if you are receiving an error in this application you might need to connect to a VPN to access the API.
 
-### Check out the project here : 
-
-[https://pintu-web-apps.vercel.app/](https://pintu-web-apps.vercel.app/)
+### Check out the project here [https://pintu-web-apps.vercel.app/](https://pintu-web-apps.vercel.app/)
 
 ## Getting Started
 

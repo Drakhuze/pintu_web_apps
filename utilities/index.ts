@@ -6,6 +6,7 @@ export const formatCurrency = (value: number): string => {
   const currencyFormatter = new Intl.NumberFormat('id-ID', {
     style: 'currency',
     currency: 'IDR',
+    maximumFractionDigits: 0,
   });
   return currencyFormatter.format(value);
 };

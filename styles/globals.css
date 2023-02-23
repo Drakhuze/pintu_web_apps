@@ -8,17 +8,17 @@
 }
 
 .datatable thead tr th {
-  @apply p-4;
+  @apply p-4 text-gray-400 font-semibold;
 }
 
-.table-token-row td {
+.token {
+  @apply font-semibold
+}
+.token-lg td {
   @apply p-4 align-middle;
 }
-.table-token-row-sm{
-  @apply p-2;
-}
-.table-token-row-sm td{
-  @apply p-1;
+.token-sm td{
+  @apply p-3;
 }
 
 @layer utilities {

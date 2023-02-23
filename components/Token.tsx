@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useLayoutEffect, useState } from 'react';
 import { IToken } from '@/interfaces';
 import { formatCurrency, usdToIdr } from '@/utilities';
 
@@ -23,52 +23,52 @@ function Token({ row }: Props) {
   const formattedLowPrice = formatCurrency(usdToIdr(Number(row.lowPrice)));
   const formattedHighPrice = formatCurrency(usdToIdr(Number(row.highPrice)));
 
-  const percentColor = Number(row.priceChangePercent) === 0 ? 'text-white' : Number(row.priceChangePercent) > 0 ? 'text-green-400' : 'text-red-400';
-  const transition = 'transition ease-in-out duration-1000';
+  const percentColor = Number(row.priceChangePercent) === 0 ? 'text-white' : Number(row.priceChangePercent) > 0 ? 'text-green-500' : 'text-red-500';
+  const transition = 'transition ease-linear duration-500';
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     setPrice(row.price);
     setLowPrice(row.lowPrice);
     setHighPrice(row.highPrice);
 
     if (isChangePrice) {
       if (Number(price) < Number(row.price)) {
-        setChangePriceColor(`text-green-400 ${transition}`);
+        setChangePriceColor('text-green-500');
       } else if (Number(price) > Number(row.price)) {
-        setChangePriceColor(`text-red-400 ${transition}`);
+        setChangePriceColor('text-red-500');
       }
       setTimeout(() => {
         setChangePriceColor(`text-white ${transition}`);
-      }, 1000);
+      }, 500);
     }
     if (isChangeLowPrice) {
       if (Number(lowPrice) < Number(row.lowPrice)) {
-        setChangeLowPriceColor(`text-green-400 ${transition}`);
+        setChangeLowPriceColor('text-green-500');
       } else if (Number(lowPrice) > Number(row.lowPrice)) {
-        setChangeLowPriceColor(`text-red-400 ${transition}`);
+        setChangeLowPriceColor('text-red-500');
       }
       setTimeout(() => {
         setChangeLowPriceColor(`text-white ${transition}`);
-      }, 1000);
+      }, 500);
     }
     if (isChangeHighPrice) {
       if (Number(highPrice) < Number(row.highPrice)) {
-        setChangeHighPriceColor(`text-green-400 ${transition}`);
+        setChangeHighPriceColor('text-green-500');
       } else if (Number(highPrice) > Number(row.highPrice)) {
-        setChangeHighPriceColor(`text-red-400 ${transition}`);
+        setChangeHighPriceColor('text-red-500');
       }
       setTimeout(() => {
         setChangeHighPriceColor(`text-white ${transition}`);
-      }, 1000);
+      }, 500);
     }
   }, [row]);
 
   return (
     <>
-      <tr key={row.name} className="table-token-row hidden lg:table-row transtition ease-in-out duration-200 hover:bg-slate-900">
+      <tr key={row.name} className="token token-lg hidden lg:table-row hover:bg-slate-900 cursor-pointer">
         <td className="">
           <div
-            className="h-10 w-10 rounded-full"
+            className="h-10 w-10 rounded-full mx-auto"
             style={{
               backgroundImage: `url('${row.logo}')`,
               backgroundSize: 'contain',
@@ -100,7 +100,7 @@ function Token({ row }: Props) {
         </td>
       </tr>
 
-      <tr className="flex lg:hidden items-center table-token-row-sm transtition ease-in-out duration-200 hover:bg-slate-900">
+      <tr className="token token-sm flex lg:hidden items-center transtition ease-in-out duration-200 hover:bg-slate-900 cursor-pointer">
         <td className="p-0">
           <div
             className="h-10 w-10 "

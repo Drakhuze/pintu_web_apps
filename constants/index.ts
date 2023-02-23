@@ -22,27 +22,27 @@ export const TAGS = [
 
 export const TABLE_CRYPTO_HEADER = [
   {
-    id: 1, title: '', width: '10%', itemAlign: 'left',
+    id: 1, title: '', width: '6%', itemAlign: 'left',
   },
   {
-    id: 2, title: 'Crypto', width: '20%', itemAlign: 'left',
+    id: 2, title: 'CRYPTO', width: '24%', itemAlign: 'left',
   },
   {
     id: 3, title: '', width: '10%', itemAlign: 'left',
   },
   {
-    id: 4, title: 'Harga', width: '15%', itemAlign: 'left',
+    id: 4, title: 'HARGA', width: '15%', itemAlign: 'left',
   },
   {
-    id: 5, title: '24 Jam', width: '12%', itemAlign: 'right',
+    id: 5, title: '24 JAM', width: '12%', itemAlign: 'right',
   },
   {
-    id: 6, title: 'Low Price', width: '15%', itemAlign: 'right',
+    id: 6, title: 'LOW PRICE', width: '15%', itemAlign: 'right',
   },
   {
-    id: 7, title: 'High Price', width: '15%', itemAlign: 'right',
+    id: 7, title: 'HIGH PRICE', width: '15%', itemAlign: 'right',
   },
 ];
 
 export const USD_TO_IDR_DEFAULT = 15197.10; // Based on USD in 22/02/2023 19:00
-export const REFETCH_INTERVAL = 2000;
+export const REFETCH_INTERVAL = 3000;

@@ -37,25 +37,12 @@ const Home: NextPage = () => {
     }
 
     const symbols = symbolList.data?.data.map((item: ISymbol) => ({
-      symbol: item.symbol,
-      name: item.name,
-      fullName: item.fullName,
-      logo: item.logo,
-      price: item.price,
-      volume: item.volume,
-      rank: item.rank,
-      tags: item.tags,
+      ...item,
     })) as ISymbol[];
 
     const tickers = tickerList !== undefined && tickerList.isSuccess === true
       ? tickerList.data.map((item: ITicker) => ({
-        symbol: item.symbol,
-        priceChange: item.priceChange,
-        priceChangePercent: item.priceChangePercent,
-        lastPrice: item.lastPrice,
-        volume: item.volume,
-        highPrice: item.highPrice,
-        lowPrice: item.lowPrice,
+        ...item,
       })) as ITicker[] : null;
 
     const result = symbols?.map((item: ISymbol) => {
@@ -63,14 +50,8 @@ const Home: NextPage = () => {
         ? tickers?.filter((p) => p.symbol === item.symbol)[0]
         : prevTicker?.filter((p) => p.symbol === item.symbol)[0];
       return {
-        symbol: item.symbol,
-        name: item.name,
-        fullName: item.fullName,
-        logo: item.logo,
+        ...item,
         price: ticker?.lastPrice,
-        volume: item.volume,
-        rank: item.rank,
-        tags: item.tags,
         priceChangePercent: ticker?.priceChangePercent,
         highPrice: ticker?.highPrice,
         lowPrice: ticker?.lowPrice,
@@ -87,10 +68,9 @@ const Home: NextPage = () => {
     });
   }
 
-  const finalData = combinedData === undefined ? [] : combinedData?.filter((p) => {
-    if (searchKey === '' && selectedBadge === '') return combinedData;
+  const finalData = combinedData === undefined ? [] : combinedData?.filter((p, i) => {
+    if (searchKey === '' && selectedBadge === '') return i < 150; // i < 100 | combinedData
     if (selectedBadge === '') return (p.name.toLowerCase().includes(searchKey.toLowerCase()) || p.fullName.toLowerCase().includes(searchKey.toLowerCase()));
-
     return (p.name.toLowerCase().includes(searchKey.toLowerCase())
     || p.fullName.toLowerCase().includes(searchKey.toLowerCase()))
     && p.tags.includes(selectedBadge);

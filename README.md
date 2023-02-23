@@ -6,7 +6,7 @@ This Next.js project is created with the following stack :
 - Tailwind
 - React Query
 
-Automatic deployment with Vercel and improved code quality with ESLint.
+Automatic deployment with Vercel and improved code quality with ESLint (Airbnb Rules).
 
 Note : This application was made using Binance Public API (I did not use the API provided by Pintu because one of the API that was provided cannot be accessed using my connection), if you are receiving an error in this application you might need to connect to a VPN to access the API.
 

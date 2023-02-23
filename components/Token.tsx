@@ -13,13 +13,9 @@ function Token({ row }: Props) {
   const [lowPrice, setLowPrice] = useState(row.lowPrice);
   const [highPrice, setHighPrice] = useState(row.highPrice);
 
-  const [changePriceColor, setChangePriceColor] = useState('text-white');
-  const [changeLowPriceColor, setChangeLowPriceColor] = useState('text-white');
-  const [changeHighPriceColor, setChangeHighPriceColor] = useState('text-white');
-
-  const isChangePrice = Number(price) !== Number(row.price);
-  const isChangeLowPrice = Number(lowPrice) !== Number(row.lowPrice);
-  const isChangeHighPrice = Number(highPrice) !== Number(row.highPrice);
+  const [priceColor, setPriceColor] = useState('text-white');
+  const [lowPriceColor, setLowPriceColor] = useState('text-white');
+  const [highPriceColor, setHighPriceColor] = useState('text-white');
 
   const formattedPrice = formatCurrency(usdToIdr(Number(row.price)), 0);
   const formattedLowPrice = formatCurrency(usdToIdr(Number(row.lowPrice)), 0);
@@ -34,34 +30,34 @@ function Token({ row }: Props) {
     setLowPrice(row.lowPrice);
     setHighPrice(row.highPrice);
 
-    if (isChangePrice) {
+    if (Number(price) !== Number(row.price)) {
       if (Number(price) < Number(row.price)) {
-        setChangePriceColor('text-green-500');
+        setPriceColor('text-green-500');
       } else if (Number(price) > Number(row.price)) {
-        setChangePriceColor('text-red-500');
+        setPriceColor('text-red-500');
       }
       setTimeout(() => {
-        setChangePriceColor(`text-white ${transition}`);
+        setPriceColor(`text-white ${transition}`);
       }, 500);
     }
-    if (isChangeLowPrice) {
+    if (Number(lowPrice) !== Number(row.lowPrice)) {
       if (Number(lowPrice) < Number(row.lowPrice)) {
-        setChangeLowPriceColor('text-green-500');
+        setLowPriceColor('text-green-500');
       } else if (Number(lowPrice) > Number(row.lowPrice)) {
-        setChangeLowPriceColor('text-red-500');
+        setLowPriceColor('text-red-500');
       }
       setTimeout(() => {
-        setChangeLowPriceColor(`text-white ${transition}`);
+        setLowPriceColor(`text-white ${transition}`);
       }, 500);
     }
-    if (isChangeHighPrice) {
+    if (Number(highPrice) !== Number(row.highPrice)) {
       if (Number(highPrice) < Number(row.highPrice)) {
-        setChangeHighPriceColor('text-green-500');
+        setHighPriceColor('text-green-500');
       } else if (Number(highPrice) > Number(row.highPrice)) {
-        setChangeHighPriceColor('text-red-500');
+        setHighPriceColor('text-red-500');
       }
       setTimeout(() => {
-        setChangeHighPriceColor(`text-white ${transition}`);
+        setHighPriceColor(`text-white ${transition}`);
       }, 500);
     }
   }, [row]);
@@ -81,7 +77,7 @@ function Token({ row }: Props) {
         <td className="">{row.fullName}</td>
         <td className="text-neutral-500">{row.name}</td>
         <td className="text-left">
-          <span className={changePriceColor}>
+          <span className={priceColor}>
             {`Rp ${formattedPrice}`}
           </span>
         </td>
@@ -96,12 +92,12 @@ function Token({ row }: Props) {
           </span>
         </td>
         <td className="text-right">
-          <span className={`${changeLowPriceColor}`}>
+          <span className={`${lowPriceColor}`}>
             {`Rp ${formattedLowPrice}`}
           </span>
         </td>
         <td className="text-right">
-          <span className={`${changeHighPriceColor}`}>
+          <span className={`${highPriceColor}`}>
             {`Rp ${formattedHighPrice}`}
           </span>
         </td>
@@ -110,7 +106,7 @@ function Token({ row }: Props) {
       <tr className="token token-sm flex lg:hidden items-center transtition ease-in-out duration-200 hover:bg-slate-900 cursor-pointer">
         <td className="p-0">
           <div
-            className="h-10 w-10 "
+            className="h-10 w-10 rounded-full"
             style={{
               backgroundImage: `url('${row.logo}')`,
               backgroundSize: 'contain',
@@ -123,7 +119,7 @@ function Token({ row }: Props) {
         </td>
         <td className="flex flex-col ml-auto text-right">
           <div>
-            <span className={`${changePriceColor}`}>
+            <span className={`${priceColor}`}>
               {`Rp ${formattedPrice}`}
             </span>
           </div>

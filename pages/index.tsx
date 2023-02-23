@@ -97,8 +97,8 @@ const Home: NextPage = () => {
   });
 
   const renderHeader = () => (
-    <div className="flex m-4 items-center">
-      <div className="font-semibold md:text-2xl lg:text-3xl text-xl text-left mr-2">
+    <div className="lg:flex m-4 items-center">
+      <div className="font-semibold md:text-2xl lg:text-3xl lg:pb-0 pb-4 text-xl text-left mr-2">
         Harga Crypto dalam Rupiah Hari Ini
       </div>
       <div className="ml-auto">
@@ -108,7 +108,7 @@ const Home: NextPage = () => {
   );
 
   const renderBadges = () => (
-    <div className="flex m-4 justify-start mt-8 pb-4 overflow-x-auto scrollbar">
+    <div className="flex m-4 justify-start mt-4 pb-4 overflow-x-auto scrollbar">
       {TAGS.map((item: ITag) => (
         <Badge
           key={item.tag}

@@ -1,6 +1,8 @@
 import React, { useLayoutEffect, useState } from 'react';
 import { IToken } from '@/interfaces';
-import { formatCurrency, usdToIdr } from '@/utilities';
+import { formatCurrency, formatPercentage, usdToIdr } from '@/utilities';
+import CaretDownIcon from '@/assets/CaretDownIcon';
+import CaretUpIcon from '@/assets/CaretUpIcon';
 
 interface Props {
   row: IToken
@@ -19,9 +21,10 @@ function Token({ row }: Props) {
   const isChangeLowPrice = Number(lowPrice) !== Number(row.lowPrice);
   const isChangeHighPrice = Number(highPrice) !== Number(row.highPrice);
 
-  const formattedPrice = formatCurrency(usdToIdr(Number(row.price)));
-  const formattedLowPrice = formatCurrency(usdToIdr(Number(row.lowPrice)));
-  const formattedHighPrice = formatCurrency(usdToIdr(Number(row.highPrice)));
+  const formattedPrice = formatCurrency(usdToIdr(Number(row.price)), 0);
+  const formattedLowPrice = formatCurrency(usdToIdr(Number(row.lowPrice)), 0);
+  const formattedHighPrice = formatCurrency(usdToIdr(Number(row.highPrice)), 0);
+  const formattedPercent = formatPercentage(Number(row.priceChangePercent), 2);
 
   const percentColor = Number(row.priceChangePercent) === 0 ? 'text-white' : Number(row.priceChangePercent) > 0 ? 'text-green-500' : 'text-red-500';
   const transition = 'transition ease-linear duration-500';
@@ -79,23 +82,27 @@ function Token({ row }: Props) {
         <td className="text-neutral-500">{row.name}</td>
         <td className="text-left">
           <span className={changePriceColor}>
-            {formattedPrice}
+            {`Rp ${formattedPrice}`}
           </span>
         </td>
         <td className="text-right">
-          <span className={`${percentColor}`}>
-            {Number(row.priceChangePercent).toFixed(2)}
-            %
+          <span className={`${percentColor} flex justify-end items-center`}>
+            {
+              Number(row.priceChangePercent) > 0
+                ? <CaretUpIcon className={`${percentColor} w-8`} /> : Number(row.priceChangePercent) < 0
+                && <CaretDownIcon className={`${percentColor} w-8`} />
+            }
+            {`${formattedPercent}%`}
           </span>
         </td>
         <td className="text-right">
           <span className={`${changeLowPriceColor}`}>
-            {formattedLowPrice}
+            {`Rp ${formattedLowPrice}`}
           </span>
         </td>
         <td className="text-right">
           <span className={`${changeHighPriceColor}`}>
-            {formattedHighPrice}
+            {`Rp ${formattedHighPrice}`}
           </span>
         </td>
       </tr>
@@ -117,13 +124,17 @@ function Token({ row }: Props) {
         <td className="flex flex-col ml-auto text-right">
           <div>
             <span className={`${changePriceColor}`}>
-              {formattedPrice}
+              {`Rp ${formattedPrice}`}
             </span>
           </div>
           <div>
-            <span className={`${percentColor} flex justify-end`}>
-              {Number(row.priceChangePercent).toFixed(2)}
-              %
+            <span className={`${percentColor} flex justify-end items-center`}>
+              {
+                Number(row.priceChangePercent) > 0
+                  ? <CaretUpIcon className={`${percentColor} w-8`} /> : Number(row.priceChangePercent) < 0
+                  && <CaretDownIcon className={`${percentColor} w-8`} />
+              }
+              {`${formattedPercent}%`}
             </span>
           </div>
         </td>

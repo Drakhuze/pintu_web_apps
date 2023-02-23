@@ -15,8 +15,8 @@ function SearchBox({ value, setSearchKey }: Props) {
       <input
         type="search"
         id="search"
-        className="block w-full rounded-xl border border-neutral-800 bg-neutral-900 py-1 px-2 pl-10 outline-none transition ease-in-out hover:border-b-green-600 focus:border-b-green-500"
-        placeholder="Search"
+        className="block lg:w-[400px] w-full rounded-sm border border-neutral-800 bg-black py-1 px-2 pl-10 outline-none transition ease-in-out hover:border-b-green-600 focus:border-b-green-500"
+        placeholder="Cari aset di Pintu..."
         value={value}
         onChange={(e) => setSearchKey(e.target.value)}
       />

@@ -19,6 +19,7 @@ Note : This application was made using Binance Public API (I did not use the API
 ### Prerequisites
 
 Node version 19.3.0
+
 npm version 9.2.0
 
 ### Installation
@@ -42,12 +43,14 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 ## Foldering
 
-- ./assets/     : Icon or picture that is used in the project.
-- ./components/ : Layout that is used is stored here.
-- ./constants/  : Stored global variable.
-- ./interfaces/ : Contain interfaces that is used.
-- ./pages/      : Main layout folder.
-- ./styles/     : CSS or Styling components.
+- ./assets/        : Icon or picture that is used in the project.
+- ./components/    : Layout that is used is stored here.
+- ./constants/     : Stored global variable.
+- ./hooks/         : Storing hooks to call API.
+- ./interfaces/    : Contain interfaces that is used.
+- ./pages/         : Main layout folder.
+- ./styles/        : CSS or Styling components.
+- ./utilities/     : Useful functions that are used globally.
 
 ## Contact
 

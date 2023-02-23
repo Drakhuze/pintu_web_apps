@@ -4,7 +4,7 @@ export const API = {
 };
 
 export const TAGS = [
-  { tag: '', name: 'Terbaru' },
+  { tag: '', name: 'All' },
   { tag: 'defi', name: 'DeFi' },
   { tag: 'NFT', name: 'NFT' },
   { tag: 'Gaming', name: 'Gaming' },
@@ -45,4 +45,4 @@ export const TABLE_CRYPTO_HEADER = [
 ];
 
 export const USD_TO_IDR_DEFAULT = 15197.10; // Based on USD in 22/02/2023 19:00
-export const REFETCH_INTERVAL = 3000;
+export const REFETCH_INTERVAL = 2000;

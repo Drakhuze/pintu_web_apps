@@ -19,15 +19,7 @@ export interface ISymbol {
   tags: string[],
 }
 
-export interface IFinalData {
-  symbol: string,
-  name: string,
-  fullName: string,
-  logo: string,
-  price: number,
-  volume: string,
-  rank: number,
-  tags: string[],
+export interface IToken extends ISymbol {
   priceChangePercent: string,
   highPrice: number,
   lowPrice: number,

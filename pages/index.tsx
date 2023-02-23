@@ -1,36 +1,38 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import Head from 'next/head';
-import PillText from '@/components/PillText';
-import { useQuery } from 'react-query';
+import Badge from '@/components/Badge';
 import { NextPage } from 'next';
+import { TABLE_CRYPTO_HEADER, TAGS } from '@/constants';
 import {
-  API, REFETCH_INTERVAL, TABLE_CRYPTO_HEADER, TAGS,
-} from '@/constants';
-import {
-  IFinalData, ISymbol, ITag, ITicker,
+  IToken, ISymbol, ITag, ITicker,
 } from '@/interfaces';
 import SearchBox from '@/components/SearchBox';
-import DataTable, { ITableHeader } from '@/components/DataTable';
-import TableTokenRow from '@/components/TableTokenRow';
-
-const getSymbolList = async () => (await fetch(API.symbolList)).json();
-const getTickerList = async () => (await fetch(API.ticker)).json();
+import Table, { ITableHeader } from '@/components/Table';
+import Token from '@/components/Token';
+import { useSymbolList } from '@/hooks/useSymbolList';
+import { useTickerList } from '@/hooks/useTickerList';
 
 const Home: NextPage = () => {
   const [searchKey, setSearchKey] = useState('');
-  const [selectedPill, setSelectedPill] = useState('');
+  const [selectedBadge, setSelectedBadge] = useState('');
+  const [prevTicker, setPrevTicker] = useState<ITicker[]>();
 
-  const symbolList = useQuery('symbolList', getSymbolList);
-  const tickerList = useQuery('tickerList', getTickerList, {
-    refetchInterval: REFETCH_INTERVAL,
-  });
+  const symbolList = useSymbolList();
+  const tickerList = useTickerList();
+
+  // Function to handle if the Ticker suddenly fails in the middle
+  useEffect(() => {
+    if (tickerList !== undefined && tickerList.isSuccess) {
+      setPrevTicker(tickerList.data);
+    }
+  }, [tickerList]);
 
   useEffect(() => {
     setSearchKey('');
-  }, [selectedPill]);
+  }, [selectedBadge]);
 
   const combinedData = useMemo(() => {
-    if (symbolList === undefined && tickerList === undefined) {
+    if (symbolList === undefined) {
       return [];
     }
 
@@ -45,18 +47,21 @@ const Home: NextPage = () => {
       tags: item.tags,
     })) as ISymbol[];
 
-    const tickers = tickerList.data?.map((item: ITicker) => ({
-      symbol: item.symbol,
-      priceChange: item.priceChange,
-      priceChangePercent: item.priceChangePercent,
-      lastPrice: item.lastPrice,
-      volume: item.volume,
-      highPrice: item.highPrice,
-      lowPrice: item.lowPrice,
-    })) as ITicker[];
+    const tickers = tickerList !== undefined && tickerList.isSuccess === true
+      ? tickerList.data.map((item: ITicker) => ({
+        symbol: item.symbol,
+        priceChange: item.priceChange,
+        priceChangePercent: item.priceChangePercent,
+        lastPrice: item.lastPrice,
+        volume: item.volume,
+        highPrice: item.highPrice,
+        lowPrice: item.lowPrice,
+      })) as ITicker[] : null;
 
     const result = symbols?.map((item: ISymbol) => {
-      const ticker = tickers?.filter((p) => p.symbol === item.symbol)[0];
+      const ticker = tickers !== null
+        ? tickers?.filter((p) => p.symbol === item.symbol)[0]
+        : prevTicker?.filter((p) => p.symbol === item.symbol)[0];
       return {
         symbol: item.symbol,
         name: item.name,
@@ -70,11 +75,10 @@ const Home: NextPage = () => {
         highPrice: ticker?.highPrice,
         lowPrice: ticker?.lowPrice,
       };
-    }) as IFinalData[];
+    }) as IToken[];
     return result;
   }, [symbolList, tickerList]);
 
-  // const combinedData = (symbolList.isSuccess && tickerList.isSuccess) ? getCombinedData() : [];
   if (combinedData !== undefined) {
     combinedData?.sort((a, b) => {
       if (a.rank === null) return 1;
@@ -84,17 +88,17 @@ const Home: NextPage = () => {
   }
 
   const finalData = combinedData === undefined ? [] : combinedData?.filter((p) => {
-    if (searchKey === '' && selectedPill === '') return combinedData;
-    if (selectedPill === '') return (p.name.toLowerCase().includes(searchKey.toLowerCase()) || p.fullName.toLowerCase().includes(searchKey.toLowerCase()));
+    if (searchKey === '' && selectedBadge === '') return combinedData;
+    if (selectedBadge === '') return (p.name.toLowerCase().includes(searchKey.toLowerCase()) || p.fullName.toLowerCase().includes(searchKey.toLowerCase()));
 
     return (p.name.toLowerCase().includes(searchKey.toLowerCase())
     || p.fullName.toLowerCase().includes(searchKey.toLowerCase()))
-    && p.tags.includes(selectedPill);
+    && p.tags.includes(selectedBadge);
   });
 
   const renderHeader = () => (
     <div className="flex m-4 items-center">
-      <div className="font-bold text-2xl text-left mr-2">
+      <div className="font-bold md:text-2xl lg:text-3xl text-xl text-left mr-2">
         Harga Crypto dalam Rupiah Hari Ini
       </div>
       <div className="ml-auto">
@@ -103,14 +107,14 @@ const Home: NextPage = () => {
     </div>
   );
 
-  const renderPillList = () => (
+  const renderBadges = () => (
     <div className="flex m-4 justify-start mt-8 pb-4 overflow-x-auto scrollbar">
       {TAGS.map((item: ITag) => (
-        <PillText
+        <Badge
           key={item.tag}
           text={item.name}
           tag={item.tag}
-          setSelectedPill={setSelectedPill}
+          setSelectedBadge={setSelectedBadge}
         />
       ))}
     </div>
@@ -120,12 +124,12 @@ const Home: NextPage = () => {
     if (!symbolList.isLoading && !tickerList.isLoading) {
       const tableHeader = TABLE_CRYPTO_HEADER as ITableHeader[];
       const tableRow = (!symbolList.isLoading && !tickerList.isLoading)
-      && finalData.map((item: IFinalData) => (
-        <TableTokenRow key={item.name} row={item} />
+      && finalData.map((item: IToken) => (
+        <Token key={item.name} row={item} />
       ));
       return (
         <div className="m-4">
-          <DataTable headerList={tableHeader} data={tableRow} />
+          <Table headerList={tableHeader} data={tableRow} />
         </div>
       );
     }
@@ -149,9 +153,9 @@ const Home: NextPage = () => {
 
       <main className="container mx-auto">
         {renderHeader()}
-        {renderPillList()}
-        {(symbolList.isLoading || tickerList.isLoading) && renderLoading()}
+        {renderBadges()}
         {renderTable()}
+        {(symbolList.isLoading || tickerList.isLoading) && renderLoading()}
       </main>
 
     </>

@@ -1,17 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { USD_TO_IDR_DEFAULT } from '@/constants';
-import { IFinalData } from '@/interfaces';
+import { IToken } from '@/interfaces';
+import { formatCurrency, usdToIdr } from '@/utilities';
 
 interface Props {
-  row: IFinalData
+  row: IToken
 }
 
-function TableTokenRow({ row }: Props) {
-  const currencyFormatter = new Intl.NumberFormat('id-ID', {
-    style: 'currency',
-    currency: 'IDR',
-  });
-
+function Token({ row }: Props) {
   const [price, setPrice] = useState(row.price);
   const [lowPrice, setLowPrice] = useState(row.lowPrice);
   const [highPrice, setHighPrice] = useState(row.highPrice);
@@ -24,15 +19,12 @@ function TableTokenRow({ row }: Props) {
   const isChangeLowPrice = Number(lowPrice) !== Number(row.lowPrice);
   const isChangeHighPrice = Number(highPrice) !== Number(row.highPrice);
 
-  const rupiahPrice = (Number(row.price) * Number(USD_TO_IDR_DEFAULT));
-  const rupiahLowPrice = (Number(row.lowPrice) * Number(USD_TO_IDR_DEFAULT));
-  const rupiahHighPrice = (Number(row.highPrice) * Number(USD_TO_IDR_DEFAULT));
-
-  const formattedPrice = currencyFormatter.format(rupiahPrice);
-  const formattedLowPrice = currencyFormatter.format(rupiahLowPrice);
-  const formattedHighPrice = currencyFormatter.format(rupiahHighPrice);
+  const formattedPrice = formatCurrency(usdToIdr(Number(row.price)));
+  const formattedLowPrice = formatCurrency(usdToIdr(Number(row.lowPrice)));
+  const formattedHighPrice = formatCurrency(usdToIdr(Number(row.highPrice)));
 
   const percentColor = Number(row.priceChangePercent) === 0 ? 'text-white' : Number(row.priceChangePercent) > 0 ? 'text-green-400' : 'text-red-400';
+  const transition = 'transition ease-in-out duration-1000';
 
   useEffect(() => {
     setPrice(row.price);
@@ -41,32 +33,32 @@ function TableTokenRow({ row }: Props) {
 
     if (isChangePrice) {
       if (Number(price) < Number(row.price)) {
-        setChangePriceColor('text-green-400 transition ease-in-out duration-1000');
+        setChangePriceColor(`text-green-400 ${transition}`);
       } else if (Number(price) > Number(row.price)) {
-        setChangePriceColor('text-red-400 transition ease-in-out duration-1000');
+        setChangePriceColor(`text-red-400 ${transition}`);
       }
       setTimeout(() => {
-        setChangePriceColor('text-white transition ease-in-out duration-1000');
+        setChangePriceColor(`text-white ${transition}`);
       }, 1000);
     }
     if (isChangeLowPrice) {
       if (Number(lowPrice) < Number(row.lowPrice)) {
-        setChangeLowPriceColor('text-green-400 transition ease-in-out duration-1000');
+        setChangeLowPriceColor(`text-green-400 ${transition}`);
       } else if (Number(lowPrice) > Number(row.lowPrice)) {
-        setChangeLowPriceColor('text-red-400 transition ease-in-out duration-1000');
+        setChangeLowPriceColor(`text-red-400 ${transition}`);
       }
       setTimeout(() => {
-        setChangeLowPriceColor('text-white transition ease-in-out duration-1000');
+        setChangeLowPriceColor(`text-white ${transition}`);
       }, 1000);
     }
     if (isChangeHighPrice) {
       if (Number(highPrice) < Number(row.highPrice)) {
-        setChangeHighPriceColor('text-green-400 transition ease-in-out duration-1000');
+        setChangeHighPriceColor(`text-green-400 ${transition}`);
       } else if (Number(highPrice) > Number(row.highPrice)) {
-        setChangeHighPriceColor('text-red-400 transition ease-in-out duration-1000');
+        setChangeHighPriceColor(`text-red-400 ${transition}`);
       }
       setTimeout(() => {
-        setChangeHighPriceColor('text-white transition ease-in-out duration-1000');
+        setChangeHighPriceColor(`text-white ${transition}`);
       }, 1000);
     }
   }, [row]);
@@ -74,7 +66,7 @@ function TableTokenRow({ row }: Props) {
   return (
     <>
       <tr key={row.name} className="table-token-row hidden lg:table-row transtition ease-in-out duration-200 hover:bg-slate-900">
-        <td className="text-white transition ease-in-out duration-1000">
+        <td className="">
           <div
             className="h-10 w-10 rounded-full"
             style={{
@@ -135,10 +127,9 @@ function TableTokenRow({ row }: Props) {
             </span>
           </div>
         </td>
-
       </tr>
     </>
   );
 }
 
-export default TableTokenRow;
+export default Token;

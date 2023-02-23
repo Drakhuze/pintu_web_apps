@@ -12,6 +12,7 @@
     "react/jsx-props-no-spreading": "off",
     "react/function-component-definition": "off",
     "no-nested-ternary": "off",
-    "react-hooks/exhaustive-deps": "off"
+    "react-hooks/exhaustive-deps": "off",
+    "import/prefer-default-export": "off"
   }
 }

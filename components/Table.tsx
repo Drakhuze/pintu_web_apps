@@ -9,10 +9,10 @@ export interface ITableHeader {
 
 interface Props {
   headerList: ITableHeader[],
-  data: any
+  data: JSX.Element[]
 }
 
-function DataTable({ headerList, data }: Props) {
+function Table({ headerList, data }: Props) {
   return (
     <div>
       <table className="datatable w-full table-fixed">
@@ -39,4 +39,4 @@ function DataTable({ headerList, data }: Props) {
   );
 }
 
-export default DataTable;
+export default Table;

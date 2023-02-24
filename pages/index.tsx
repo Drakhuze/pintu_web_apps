@@ -147,8 +147,8 @@ const Home: NextPage = () => {
       <main className="container mx-auto">
         {renderHeader()}
         {renderBadges()}
-        {renderStatus()}
         {renderTable()}
+        {renderStatus()}
       </main>
 
     </>

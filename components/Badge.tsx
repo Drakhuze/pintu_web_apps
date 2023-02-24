@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 
 interface Props {
   text: string;
@@ -14,4 +14,4 @@ function Badge({ text, tag, setSelectedBadge }: Props) {
   );
 }
 
-export default Badge;
+export default memo(Badge);

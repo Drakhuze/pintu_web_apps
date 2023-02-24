@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 
 interface Props {
   className: string;
@@ -10,4 +10,4 @@ const Skeleton = ({ className }: Props) => (
   </div>
 );
 
-export default Skeleton;
+export default memo(Skeleton);

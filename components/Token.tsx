@@ -3,6 +3,7 @@ import { IToken } from '@/interfaces';
 import { formatCurrency, formatPercentage, usdToIdr } from '@/utilities';
 import CaretDownIcon from '@/assets/CaretDownIcon';
 import CaretUpIcon from '@/assets/CaretUpIcon';
+import Skeleton from './Skeleton';
 
 interface Props {
   row: IToken
@@ -78,27 +79,32 @@ function Token({ row }: Props) {
         <td className="text-neutral-500">{row.name}</td>
         <td className="text-left">
           <span className={priceColor}>
-            {`Rp ${formattedPrice}`}
+            {row.price !== undefined ? `Rp ${formattedPrice}` : <Skeleton className=" h-5 w-28 " /> }
           </span>
         </td>
         <td className="text-right">
           <span className={`${percentColor} flex justify-end items-center`}>
-            {
-              Number(row.priceChangePercent) > 0
-                ? <CaretUpIcon className={`${percentColor} w-8`} /> : Number(row.priceChangePercent) < 0
-                && <CaretDownIcon className={`${percentColor} w-8`} />
-            }
-            {`${formattedPercent}%`}
+            {row.priceChangePercent !== undefined
+              ? (
+                <>
+                  {Number(row.priceChangePercent) > 0
+                    ? <CaretUpIcon className={`${percentColor} w-8`} /> : Number(row.priceChangePercent) < 0
+                && <CaretDownIcon className={`${percentColor} w-8`} />}
+
+                  {`${formattedPercent}%`}
+                </>
+              )
+              : <Skeleton className="h-5 w-16" />}
           </span>
         </td>
         <td className="text-right">
           <span className={`${lowPriceColor}`}>
-            {`Rp ${formattedLowPrice}`}
+            {row.lowPrice !== undefined ? `Rp ${formattedLowPrice}` : <Skeleton className=" h-5 w-28 ml-auto" /> }
           </span>
         </td>
         <td className="text-right">
           <span className={`${highPriceColor}`}>
-            {`Rp ${formattedHighPrice}`}
+            {row.highPrice !== undefined ? `Rp ${formattedHighPrice}` : <Skeleton className=" h-5 w-28 ml-auto" /> }
           </span>
         </td>
       </tr>
@@ -120,17 +126,22 @@ function Token({ row }: Props) {
         <td className="flex flex-col ml-auto text-right">
           <div>
             <span className={`${priceColor}`}>
-              {`Rp ${formattedPrice}`}
+              {row.price !== undefined ? `Rp ${formattedPrice}` : <Skeleton className=" h-5 w-28 mb-4" /> }
             </span>
           </div>
           <div>
             <span className={`${percentColor} flex justify-end items-center`}>
-              {
-                Number(row.priceChangePercent) > 0
-                  ? <CaretUpIcon className={`${percentColor} w-8`} /> : Number(row.priceChangePercent) < 0
-                  && <CaretDownIcon className={`${percentColor} w-8`} />
-              }
-              {`${formattedPercent}%`}
+              {row.priceChangePercent !== undefined
+                ? (
+                  <>
+                    {Number(row.priceChangePercent) > 0
+                      ? <CaretUpIcon className={`${percentColor} w-8`} /> : Number(row.priceChangePercent) < 0
+                && <CaretDownIcon className={`${percentColor} w-8`} />}
+
+                    {`${formattedPercent}%`}
+                  </>
+                )
+                : <Skeleton className="h-5 w-16" />}
             </span>
           </div>
         </td>

@@ -24,14 +24,14 @@ function Table({ headerList, data }: Props) {
           </tr>
         </thead>
         <tbody>
-          {
+          {/* {
             data.length === 0
             && (
               <tr>
                 <td className="p-4 text-center" colSpan={7}>No Data</td>
               </tr>
             )
-          }
+          } */}
           {data.length > 0 && data.map((item: JSX.Element) => item)}
         </tbody>
       </table>

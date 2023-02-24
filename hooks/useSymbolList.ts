@@ -18,4 +18,6 @@ const fetchSymbolList = async () => {
   return result as ISymbolListResponse;
 };
 
-export const useSymbolList = () => useQuery('symbolList', fetchSymbolList);
+export const useSymbolList = () => useQuery('symbolList', fetchSymbolList, {
+  retryDelay: 5000,
+});

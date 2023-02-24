@@ -18,7 +18,7 @@ const Home: NextPage = () => {
   const [prevTicker, setPrevTicker] = useState<ITicker[]>();
 
   const symbolList = useSymbolList();
-  const tickerList = useTickerList();
+  const tickerList = useTickerList(symbolList.isSuccess, symbolList.data?.data);
 
   // Function to handle if the Ticker suddenly fails in the middle
   useEffect(() => {
@@ -72,8 +72,8 @@ const Home: NextPage = () => {
     if (searchKey === '' && selectedBadge === '') return i < 150; // i < 100 | combinedData
     if (selectedBadge === '') return (p.name.toLowerCase().includes(searchKey.toLowerCase()) || p.fullName.toLowerCase().includes(searchKey.toLowerCase()));
     return (p.name.toLowerCase().includes(searchKey.toLowerCase())
-    || p.fullName.toLowerCase().includes(searchKey.toLowerCase()))
-    && p.tags.includes(selectedBadge);
+      || p.fullName.toLowerCase().includes(searchKey.toLowerCase()))
+      && p.tags.includes(selectedBadge);
   });
 
   const renderHeader = () => (
@@ -101,12 +101,12 @@ const Home: NextPage = () => {
   );
 
   const renderTable = () => {
-    if (!symbolList.isLoading && !tickerList.isLoading) {
+    if (!symbolList.isLoading) {
       const tableHeader = TABLE_CRYPTO_HEADER as ITableHeader[];
-      const tableRow = (!symbolList.isLoading && !tickerList.isLoading)
-      && finalData.map((item: IToken) => (
-        <Token key={item.name} row={item} />
-      ));
+      const tableRow = (!symbolList.isLoading)
+        && finalData.map((item: IToken) => (
+          <Token key={item.name} row={item} />
+        ));
       return (
         <div className="m-4">
           <Table headerList={tableHeader} data={tableRow} />
@@ -116,10 +116,23 @@ const Home: NextPage = () => {
     return <div />;
   };
 
-  const renderLoading = () => (
-    <div className="text-center p-8">
-      Loading...
-    </div>
+  const renderStatus = () => (
+    symbolList.isLoading
+      ? (
+        <div className="m-4 border border-neutral-800">
+          <div className="text-center p-4">
+            Loading...
+          </div>
+        </div>
+      )
+      : symbolList.isError
+      && (
+        <div className="m-4 border border-neutral-800">
+          <div className="text-center p-4">
+            Error when fetching the API...
+          </div>
+        </div>
+      )
   );
 
   return (
@@ -134,8 +147,8 @@ const Home: NextPage = () => {
       <main className="container mx-auto">
         {renderHeader()}
         {renderBadges()}
+        {renderStatus()}
         {renderTable()}
-        {(symbolList.isLoading || tickerList.isLoading) && renderLoading()}
       </main>
 
     </>

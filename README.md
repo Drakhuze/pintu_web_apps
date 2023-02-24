@@ -10,6 +10,8 @@ Automatic deployment with Vercel and improved code quality with ESLint (Airbnb R
 
 Note : This application was made using Binance Public API (I did not use the API provided by Pintu because one of the API that was provided cannot be accessed using my connection), if you are receiving an error in this application you might need to connect to a VPN to access the API.
 
+Currency was in dollar that is converted to rupiah with constant conversion value of 15197.10 Based on USD in 22/02/2023 19:00, so what you see might not be the real price. This could be improved in the future by including real time USD to IDR API converter.
+
 ### Check out the project here [https://pintu-web-apps.vercel.app/](https://pintu-web-apps.vercel.app/)
 
 ## Getting Started

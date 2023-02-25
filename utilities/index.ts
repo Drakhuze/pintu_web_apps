@@ -17,3 +17,5 @@ export const formatPercentage = (value: number, maxFraction: number): string => 
 
   return currencyFormatter.format(result);
 };
+
+export const convertPositive = (value: number): number => (value >= 0 ? value : value * -1);

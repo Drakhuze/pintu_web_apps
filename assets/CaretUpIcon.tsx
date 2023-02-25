@@ -13,7 +13,7 @@ function CaretUpIcon({ className }: Props) {
       stroke="currentColor"
       className={className}
     >
-      <path d="M11 15l4-5 4 5z" />
+      <path d="M2 18l8-10 8 10z" />
     </svg>
   );
 }

@@ -46,3 +46,4 @@ export const TABLE_CRYPTO_HEADER = [
 
 export const USD_TO_IDR_DEFAULT = 15197.10; // Based on USD in 22/02/2023 19:00
 export const REFETCH_INTERVAL = 3000;
+export const TOP_MOVERS_SIZE = 8;

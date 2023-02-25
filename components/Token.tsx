@@ -88,8 +88,8 @@ function Token({ row }: Props) {
               ? (
                 <>
                   {Number(row.priceChangePercent) > 0
-                    ? <CaretUpIcon className={`${percentColor} w-8`} /> : Number(row.priceChangePercent) < 0
-                && <CaretDownIcon className={`${percentColor} w-8`} />}
+                    ? <CaretUpIcon className={`${percentColor} w-4`} /> : Number(row.priceChangePercent) < 0
+                && <CaretDownIcon className={`${percentColor} w-4`} />}
 
                   {`${formattedPercent}%`}
                 </>
@@ -135,8 +135,8 @@ function Token({ row }: Props) {
                 ? (
                   <>
                     {Number(row.priceChangePercent) > 0
-                      ? <CaretUpIcon className={`${percentColor} w-8`} /> : Number(row.priceChangePercent) < 0
-                && <CaretDownIcon className={`${percentColor} w-8`} />}
+                      ? <CaretUpIcon className={`${percentColor} w-4`} /> : Number(row.priceChangePercent) < 0
+                && <CaretDownIcon className={`${percentColor} w-4`} />}
 
                     {`${formattedPercent}%`}
                   </>

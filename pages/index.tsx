@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import Head from 'next/head';
 import Badge from '@/components/Badge';
 import { NextPage } from 'next';
-import { TABLE_CRYPTO_HEADER, TAGS } from '@/constants';
+import { TABLE_CRYPTO_HEADER, TAGS, TOP_MOVERS_SIZE } from '@/constants';
 import {
   IToken, ISymbol, ITag, ITicker,
 } from '@/interfaces';
@@ -11,6 +11,13 @@ import Table, { ITableHeader } from '@/components/Table';
 import Token from '@/components/Token';
 import { useSymbolList } from '@/hooks/useSymbolList';
 import { useTickerList } from '@/hooks/useTickerList';
+import _ from 'lodash';
+import {
+  convertPositive, formatCurrency, formatPercentage, usdToIdr,
+} from '@/utilities';
+import CaretUpIcon from '@/assets/CaretUpIcon';
+import CaretDownIcon from '@/assets/CaretDownIcon';
+import Skeleton from '@/components/Skeleton';
 
 const Home: NextPage = () => {
   const [searchKey, setSearchKey] = useState('');
@@ -68,8 +75,16 @@ const Home: NextPage = () => {
     });
   }
 
-  const finalData = combinedData === undefined ? [] : combinedData?.filter((p, i) => {
-    if (searchKey === '' && selectedBadge === '') return i < 150; // i < 100 | combinedData
+  const topAllMovers = combinedData === undefined ? [] : _.cloneDeep(combinedData);
+  topAllMovers.sort((a, b) => {
+    if (a.priceChangePercent === null) return -1;
+    if (b.priceChangePercent === null) return 1;
+    return convertPositive(Number(a.priceChangePercent))
+      < convertPositive(Number(b.priceChangePercent)) ? 1 : -1;
+  });
+
+  const finalData = combinedData === undefined ? [] : combinedData?.filter((p) => {
+    if (searchKey === '' && selectedBadge === '') return combinedData; // i < 100 | combinedData
     if (selectedBadge === '') return (p.name.toLowerCase().includes(searchKey.toLowerCase()) || p.fullName.toLowerCase().includes(searchKey.toLowerCase()));
     return (p.name.toLowerCase().includes(searchKey.toLowerCase())
       || p.fullName.toLowerCase().includes(searchKey.toLowerCase()))
@@ -77,7 +92,7 @@ const Home: NextPage = () => {
   });
 
   const renderHeader = () => (
-    <div className="lg:flex m-4 items-center">
+    <div className="lg:flex m-4 mt-8 items-center">
       <div className="font-semibold md:text-2xl lg:text-3xl lg:pb-0 pb-4 text-xl text-left mr-2">
         Harga Crypto dalam Rupiah Hari Ini
       </div>
@@ -88,7 +103,7 @@ const Home: NextPage = () => {
   );
 
   const renderBadges = () => (
-    <div className="flex m-4 justify-start mt-4 pb-4 overflow-x-auto scrollbar">
+    <div className="flex m-4 justify-start overflow-x-auto scrollbar">
       {TAGS.map((item: ITag) => (
         <Badge
           key={item.tag}
@@ -135,6 +150,62 @@ const Home: NextPage = () => {
       )
   );
 
+  const renderTopMovers = () => {
+    const topMovers = topAllMovers.slice(0, TOP_MOVERS_SIZE).map((item: IToken) => {
+      const percentColor = Number(item.priceChangePercent) === 0 ? 'text-white' : Number(item.priceChangePercent) > 0 ? 'text-green-500' : 'text-red-500';
+
+      const formattedPrice = formatCurrency(usdToIdr(Number(item.price)), 0);
+      const formattedPercent = formatPercentage(Number(item.priceChangePercent), 2);
+
+      return (
+        <div className="p-2 m-2 ml-0 border border-neutral-800 flex-grow min-w-[150px] hover:bg-slate-900 cursor-pointer">
+          <div className="flex items-center">
+            <div
+              className="min-h-[32px] min-w-[32px] rounded-full"
+              style={{
+                backgroundImage: `url('${item.logo}')`,
+                backgroundSize: 'contain',
+              }}
+            />
+            <div className="pl-2 overflow-hidden overflow-ellipsis whitespace-nowrap font-semibold">
+              {item.name}
+            </div>
+          </div>
+          <div className="flex items-center pt-1">
+            <div className="font-light text-neutral-300 text-sm">
+              {`Rp ${formattedPrice}`}
+            </div>
+          </div>
+          <div className={`${percentColor} flex ml-auto items-center font-bold`}>
+            {item.priceChangePercent !== undefined
+              ? (
+                <>
+                  {Number(item.priceChangePercent) > 0
+                    ? <CaretUpIcon className={`${percentColor} w-4`} /> : Number(item.priceChangePercent) < 0
+                && <CaretDownIcon className={`${percentColor} w-4`} />}
+
+                  {`${formattedPercent}%`}
+                </>
+              )
+              : <Skeleton className="h-5 w-16" />}
+          </div>
+        </div>
+      );
+    });
+
+    return (
+      (symbolList.isSuccess && (tickerList.isSuccess || prevTicker !== undefined))
+        && (
+          <div className="m-4 mt-12">
+            <span className="font-semibold text-xl">🔥 Top Movers (24 Jam)</span>
+            <div className="flex justify-start mt-4 overflow-x-auto scrollbar">
+              {topMovers}
+            </div>
+          </div>
+        )
+    );
+  };
+
   return (
     <>
       <Head>
@@ -146,6 +217,7 @@ const Home: NextPage = () => {
 
       <main className="container mx-auto">
         {renderHeader()}
+        {renderTopMovers()}
         {renderBadges()}
         {renderTable()}
         {renderStatus()}
